@@ -81,6 +81,7 @@
             <div class="right-menu">
 
               <div class="avatar-wrapper">{{ userInfo.name }}</div>
+              <div @click="dialogFormVisible = true">修改密码</div>
               <!-- <div class="logout" @click="logout">退出</div> -->
               <img src="images/icons/btn_close@2x.png" class="outLogin" alt="退出" @click="logout" />
             </div>
@@ -99,6 +100,17 @@
             ></iframe>
           </div>
         </div>
+        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="新密码" >
+              <el-input v-model="form.newPass" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="handleModifyPass">确 定</el-button>
+          </div>
+        </el-dialog>
       </div>
     </div>
     <!-- 开发环境版本，包含了有帮助的命令行警告 -->
@@ -118,6 +130,10 @@
             defAct: '2',
             menuActived: '2',
             userInfo: {},
+            dialogFormVisible: false,
+            form: {
+              newPass: '',
+            },
             menuList: [
               // {
               //   id: '1',
@@ -200,6 +216,15 @@
           window.menuHandle = this.menuHandle
         },
         methods: {
+          handleModifyPass() {
+            $axios.post("/employee/modifyPass", {
+              password: this.form.newPass
+            }).then(res => {
+              console.log(res);
+            }).finally(()=>{
+              this.dialogFormVisible = false;
+            })
+          },
           logout() {
             logoutApi().then((res)=>{
               if(res.code === 1){

@@ -36,7 +36,7 @@
         </el-form-item>
 
         <el-form-item
-          label="手机号:"
+          label="手机号1:"
           prop="phone"
         >
           <el-input
@@ -125,8 +125,8 @@
               ],
               //姓名
               name: [{ required: true, 'validator': checkName, 'trigger': 'blur' }],
-              'phone': [{ 'required': true, 'validator': checkPhone, 'trigger': 'blur' }],
-              'idNumber': [{ 'required': true, 'validator': validID, 'trigger': 'blur' }]
+              // 'phone': [{ 'required': true, 'validator': checkPhone, 'trigger': 'blur' }],
+              // 'idNumber': [{ 'required': true, 'validator': validID, 'trigger': 'blur' }]
             }
           }
         },
@@ -164,19 +164,19 @@
                   addEmployee(params).then(res => {
                     if (res.code === 1) {
                       this.$message.success('员工添加成功！')
-                      if (!st) {
-                        this.goBack()
-                      } else {
-                        this.ruleForm = {
-                          username: '',
-                          'name': '',
-                          'phone': '',
-                          // 'password': '',
-                          // 'rePassword': '',/
-                          'sex': '男',
-                          'idNumber': ''
-                        }
-                      }
+                      // if (!st) {
+                      //   this.goBack()
+                      // } else {
+                      //   this.ruleForm = {
+                      //     username: '',
+                      //     'name': '',
+                      //     'phone': '',
+                      //     // 'password': '',
+                      //     // 'rePassword': '',/
+                      //     'sex': '男',
+                      //     'idNumber': ''
+                      //   }
+                      // }
                     } else {
                       this.$message.error(res.msg || '操作失败')
                     }

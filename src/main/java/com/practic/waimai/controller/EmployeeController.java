@@ -1,16 +1,17 @@
 package com.practic.waimai.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.practic.waimai.common.Result;
 import com.practic.waimai.entity.Employee;
 import com.practic.waimai.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
@@ -60,28 +61,33 @@ public class EmployeeController {
 
     @PostMapping("/add")
     public Result add(HttpServletRequest request, @RequestBody Employee emp) {
-        Long currentId = (Long) request.getSession().getAttribute("empId");
-        emp.setCreateTime(LocalDateTime.now());
-        emp.setUpdateTime(LocalDateTime.now());
-        emp.setCreateUser(currentId);
-        emp.setUpdateUser(currentId);
         emp.setPassword("123456");
 
         employeeService.save(emp);
         return Result.success("添加员工成功");
     };
 
-    @PostMapping("/modifyPass")
-    public Result modifyPass(HttpServletRequest request, @RequestBody Employee employee) {
-        Long currentId = (Long) request.getSession().getAttribute("empId");
-        String newPass = employee.getPassword();
+    @PostMapping("/update")
+    public Result update(HttpServletRequest request, @RequestBody Employee emp) {
+        employeeService.updateById(emp);
+        return Result.success("修改信息成功");
+    };
 
-        System.out.printf(newPass);
-        System.out.printf(String.valueOf(currentId));
-//        Employee emp = employeeService.getById(currentId);
-//        emp.setPassword(newPass);
-//        employeeService.updateById(employee);
+    @GetMapping("/{id}")
+    public Result getById(@PathVariable Long id) {
+        Employee emp = employeeService.getById(id);
+        return Result.success(emp);
+    };
 
-        return Result.success("修改成功");
+    @GetMapping("/page")
+    public Result getPage(int page, int pageSize, String name) {
+        Page pageInfo = new Page(page, pageSize);
+
+        LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper();
+        wrapper.like(!StringUtils.isEmpty(name), Employee::getName, name);
+        wrapper.orderByDesc(Employee::getUpdateTime);
+
+        employeeService.page(pageInfo, wrapper);
+        return Result.success(pageInfo);
     };
 }

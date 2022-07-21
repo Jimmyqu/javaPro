@@ -45,6 +45,8 @@ public class LoginCheckFilter implements Filter {
 
         // 4-1、判断登录状态(session中含有empId的登录信息)，如果已经登录，则直接放行
         Long empId = (Long) request.getSession().getAttribute("empId");
+        log.info("用户id为:{}",empId);
+
         if (empId != null){
             log.info("用户已经登录，用户id为:{}",empId);
 

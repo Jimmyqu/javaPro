@@ -18,4 +18,10 @@ public class GlobalExceptionHandle {
         log.error(e.getMessage());
         return Result.error("系统全局错误");
     }
+
+    @ExceptionHandler(CustException.class)
+    public Result exceptHandle(CustException e) {
+        log.error(e.getMessage());
+        return Result.error(e.getMessage());
+    }
 }

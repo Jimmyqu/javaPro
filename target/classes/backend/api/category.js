@@ -18,9 +18,9 @@ const queryCategoryById = (id) => {
 // 删除当前列的接口
 const deleCategory = (ids) => {
   return $axios({
-    url: '/category',
-    method: 'delete',
-    params: { ids }
+    url: '/category/del',
+    method: 'post',
+    data: { id: ids }
   })
 }
 
@@ -36,7 +36,7 @@ const editCategory = (params) => {
 // 新增接口
 const addCategory = (params) => {
   return $axios({
-    url: '/category',
+    url: '/category/save',
     method: 'post',
     data: { ...params }
   })

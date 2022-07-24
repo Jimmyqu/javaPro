@@ -34,6 +34,12 @@ public class CategoryController {
         return Result.success("添加成功");
     };
 
+    @PostMapping("/update")
+    public Result update(@RequestBody Category cate) {
+        categoryService.updateById(cate);
+        return Result.success("修改成功");
+    };
+
     @PostMapping("/del")
     public Result del(@RequestBody Category cate) {
         categoryService.remove(cate);

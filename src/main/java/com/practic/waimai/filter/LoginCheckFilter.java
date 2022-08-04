@@ -2,7 +2,7 @@ package com.practic.waimai.filter;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import com.practic.waimai.common.Result;
+import com.practic.waimai.common.ThreadContext;
 import org.springframework.util.AntPathMatcher;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -50,9 +50,10 @@ public class LoginCheckFilter implements Filter {
         if (empId != null){
             log.info("用户已经登录，用户id为:{}",empId);
 
-            // 自定义元数据对象处理器 MyMetaObjectHandler中需要使用 登录用户id
-            //   通过ThreadLocal set和get用户id
-//            BaseContext.setCurrentId(empId);
+            // 元数据对象处理器 MyMetaObjectHandler中需要使用 登录用户id(它自身并不能获取)
+            // 在整个请求到完成的链条中 通过ThreadLocal set和get用户id
+            ThreadContext.setCurrentId(empId);
+
 
             filterChain.doFilter(request,response);
             return;
